@@ -10,6 +10,14 @@ the package ships without a bump fails the release gate.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-03
+
+### Changed
+
+- Raised the package's coverage gate from 85% to 96% after adding direct
+  facade coverage, repository-rejection behavior, and atom-prefixed migration
+  coverage.
+
 ## [0.1.0] - 2026-09-02
 
 ### Added

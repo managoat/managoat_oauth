@@ -3,6 +3,12 @@ defmodule Managoat.OAuth.CodesTest do
 
   import Ecto.Query
 
+  defmodule RejectingRepo do
+    @moduledoc false
+
+    def insert(changeset, []), do: {:error, Ecto.Changeset.add_error(changeset, :base, "refused")}
+  end
+
   describe "authorize/3 + exchange/2" do
     test "the happy path: a code, consumed once for the token the host mints" do
       subject = subject()
@@ -86,6 +92,18 @@ defmodule Managoat.OAuth.CodesTest do
       assert {:error, :unknown_client} =
                TestInstance.authorize(subject(), request(challenge, %{"client_id" => "nope"}))
 
+      refute_received {:audit, _, _, _}
+      assert TestRepo.aggregate(AuthorizationCode, :count) == 0
+    end
+
+    test "a repository rejection is returned and is not audited" do
+      {_verifier, challenge} = pkce()
+      config = %{TestInstance.__managoat_oauth__() | repo: RejectingRepo}
+
+      assert {:error, %Ecto.Changeset{errors: errors}} =
+               Managoat.OAuth.authorize(config, subject(), request(challenge))
+
+      assert errors[:base] == {"refused", []}
       refute_received {:audit, _, _, _}
       assert TestRepo.aggregate(AuthorizationCode, :count) == 0
     end
