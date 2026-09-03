@@ -1,7 +1,7 @@
 defmodule Managoat.OAuth.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
   @source_url "https://github.com/managoat/managoat_oauth"
 
   def project do
@@ -19,11 +19,12 @@ defmodule Managoat.OAuth.MixProject do
       docs: docs(),
       dialyzer: dialyzer(),
       test_coverage: [
-        # What this suite measures on its own: the grant state machine, the
-        # client registry, the config loader and the migration, driven through
-        # a test instance against a recording host and the library's own
-        # Postgres database. Raise it as the tests grow; never lower it.
-        summary: [threshold: 85]
+        # The grant state machine, client registry, config loader and migration
+        # currently measure 96.20%, driven through both an instance and the
+        # direct facade against the library's own Postgres database. The
+        # remaining misses are collision retries and concurrency-loser paths;
+        # keep a little headroom for a real branch and never lower this gate.
+        summary: [threshold: 96]
       ]
     ]
   end

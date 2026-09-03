@@ -16,8 +16,8 @@ defmodule Managoat.OAuth.MigrationTest do
     @moduledoc false
     use Ecto.Migration
 
-    def up, do: Managoat.OAuth.Migration.up(prefix: "managoat_oauth_scratch")
-    def down, do: Managoat.OAuth.Migration.down(prefix: "managoat_oauth_scratch")
+    def up, do: Managoat.OAuth.Migration.up(prefix: :managoat_oauth_scratch)
+    def down, do: Managoat.OAuth.Migration.down(prefix: :managoat_oauth_scratch)
   end
 
   test "up creates tables the schemas load against; down removes them" do
