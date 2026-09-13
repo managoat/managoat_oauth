@@ -10,6 +10,12 @@ the package ships without a bump fails the release gate.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-13
+
+### Fixed
+
+- Generate device user codes from cryptographically strong random bytes with unbiased rejection sampling. Preserve the existing eight-character alphabet and displayed `XXXX-XXXX` shape without consuming the process PRNG state.
+
 ## [0.1.1] - 2026-09-03
 
 ### Changed
