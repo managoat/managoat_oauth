@@ -18,6 +18,8 @@ defmodule Managoat.OAuth.Device do
   # fifteen-minute, rate-limited window.
   @user_code_alphabet ~c"BCDFGHJKLMNPQRSTVWXZ"
   @user_code_length 8
+  @alphabet_size length(@user_code_alphabet)
+  @unbiased_byte_limit 256 - rem(256, @alphabet_size)
 
   @doc false
   @spec interval_seconds() :: pos_integer()
@@ -69,8 +71,18 @@ defmodule Managoat.OAuth.Device do
 
   defp generate_user_code do
     for _ <- 1..@user_code_length, into: "" do
-      <<Enum.random(@user_code_alphabet)>>
+      <<Enum.at(@user_code_alphabet, random_alphabet_index())>>
     end
+  end
+
+  defp random_alphabet_index do
+    <<byte>> = :crypto.strong_rand_bytes(1)
+
+    # Reject the incomplete final group so every alphabet index has the same
+    # probability; taking byte modulo the alphabet size directly would bias it.
+    if byte < @unbiased_byte_limit,
+      do: rem(byte, @alphabet_size),
+      else: random_alphabet_index()
   end
 
   @doc false

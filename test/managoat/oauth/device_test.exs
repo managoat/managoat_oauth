@@ -2,6 +2,18 @@ defmodule Managoat.OAuth.DeviceTest do
   use Managoat.OAuth.Case, async: true
 
   describe "device authorization" do
+    test "user code generation does not consume the process PRNG state" do
+      :rand.seed(:exsss, {17, 31, 53})
+      seed = :rand.export_seed()
+
+      for _ <- 1..32 do
+        assert {:ok, %{user_code: user_code}} = TestInstance.start_device_grant()
+        assert user_code =~ ~r/^[BCDFGHJKLMNPQRSTVWXZ]{4}-[BCDFGHJKLMNPQRSTVWXZ]{4}$/
+      end
+
+      assert :rand.export_seed() == seed
+    end
+
     test "the happy path: start → approve → poll mints the host's token, once" do
       subject = subject()
 
