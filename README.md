@@ -1,5 +1,12 @@
 # Managoat.OAuth
 
+> **Archived 2026-10-15.** This library has been folded back into
+> [Fountain](https://github.com/managoat/fountain), its only consumer,
+> at [`apps/fountain/lib/managoat/oauth`](https://github.com/managoat/fountain/tree/main/apps/fountain/lib/managoat/oauth)
+> ([managoat/fountain#2744](https://github.com/managoat/fountain/pull/2744)).
+> Every release on Hex is retired; they stay installable, but there will be no
+> further releases.
+
 An OAuth 2.0 authorization server for public clients, small on purpose: the
 **authorization code grant with PKCE (S256)** for browser apps on another
 origin, and the **device authorization grant** (RFC 8628 shape) for a CLI
